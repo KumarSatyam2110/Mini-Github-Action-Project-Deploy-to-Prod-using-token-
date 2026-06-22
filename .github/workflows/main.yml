@@ -9,10 +9,12 @@ on:
 jobs:
   prod-deploy:
     runs-on: ${{ matrix.os }}
+
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
         node-version: [18, 20, 22]
+
         exclude:
           - os: windows-latest
             node-version: 22
@@ -27,38 +29,30 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Cache Dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v4
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json')}}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Install Dependencies
         run: npm ci
-        
-      - name: Run tests
+
+      - name: Run Tests
         run: npm test
 
       - name: Build
-        run: npm build
+        run: npm run build
 
-      - name: Artifact Upload
-        run: actions/upload-artifact@v4
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
         with:
           name: artifact-1
           path: |
             package*
 
-      - name: Checkout
-        run: actions/checkout@v6
-
       - name: Deploy
         run: echo "Deploy to production..."
         env:
           API_TOKEN: ${{ secrets.PROD_SERVER_TOKEN }}
-            
-          
-          
-      
-          
