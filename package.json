@@ -1,4 +1,10 @@
-npm init -y
-git add package.json
-git commit -m "Add package.json"
-git push
+{
+  "name": "mini-github-action-project",
+  "version": "1.0.0",
+  "description": "GitHub Actions practice project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests configured\"",
+    "build": "echo \"Building application\""
+  }
+}
